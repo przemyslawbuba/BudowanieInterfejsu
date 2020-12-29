@@ -1,8 +1,8 @@
 {
   "dependencies": {
-    "bootstrap": "^4.5.3",
+    "bootstrap": "^4.0.0-alpha.6",
     "express": "^4.17.1",
-    "react-bootstrap": "^0.32.4",
+    "react-bootstrap": "^0.32.1",
     "react-bootstrap-validation": "^0.1.11",
     "react-icons": "^4.1.0",
     "react-router-dom": "^5.2.0"

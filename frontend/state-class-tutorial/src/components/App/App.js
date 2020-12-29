@@ -33,14 +33,14 @@ function App() {
                 <ul className="header">
                     <li ><NavLink exact to="/">Strona domowa </NavLink></li>
                     <li><NavLink to="/offer">Oferty</NavLink></li>
-                    {/*<li><NavLink to="/contact">Kontakt</NavLink></li>*/}
+                    <li><NavLink to="/contact">Kontakt</NavLink></li>
                     <li><NavLink to="/userDetail">Dane użytkownika</NavLink></li>
                     <button onClick={logout}>Logout</button>
                 </ul>
                 <div className="content">
                     <Route exact to path="/" component={Home}/>
                     <Route path="/offer" component={Offer}/>
-                    {/*<Route path="/contact" component={Contact}/>*/}
+                    <Route path="/contact" component={Contact}/>
                     <Route path="/userDetail" component={UserDetail}/>
                 </div>
             </div>
