@@ -12,7 +12,7 @@ class Contract extends Component {
 
     render() {
         return (
-            <form className="contractForm" onSubmit={this.contactSubmit.bind(this)}>
+            <form className="contractForm" onSubmit={this.contactSubmit.bind(this)} ref="form">
                 <h2>Formularz kontaktowy</h2>
                 <fieldset>
                     <div className="form-group">
@@ -53,17 +53,17 @@ class Contract extends Component {
     contactSubmit(e) {
         e.preventDefault();
 
-        if (this.handleValidation()) {
+        if (this.Validation()) {
             alert("Form submitted");
-            // wysylanie maila
-
+            // this.setState({ name: '' })
+            // document.getElementById('name').value = '';
         } else {
             alert("Form has errors.")
         }
 
     }
 
-    handleValidation() {
+    Validation() {
         let fields = this.state.fields;
         let errors = {};
         let isValid = true;
@@ -115,6 +115,13 @@ class Contract extends Component {
             errors["query"] = 'Treść musi zawierać przynajmniej 20 znaków'
         }
         this.setState({errors: errors});
+
+        var mail = fields["email"];
+        var surname = fields["surname"];
+        var name = fields["name"];
+        var query = fields["query"];
+        console.log(JSON.stringify({mail, surname, name, query}));
+        sendMail({mail, surname, name, query})
         return isValid;
     }
 
@@ -123,7 +130,29 @@ class Contract extends Component {
         fields[field] = e.target.value;
         this.setState({fields});
     }
+
+
 }
+function sendMail(contactMail) {
+    return fetch('http://localhost:8080/mail/sendMail', {
+        method: 'POST',
+        headers: {
+            Authorization: localStorage.getItem('tokenKey'),
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(contactMail)
+    })
+        .then(response => {
+            if (response.status >= 200 && response.status < 300) {
+                return response;
+                console.log(response);
+                window.location.reload();
+            } else {
+                console.log('Somthing happened wrong');
+            }
+        }).catch(err => err);
+}
+
 
 
 export default Contract;
