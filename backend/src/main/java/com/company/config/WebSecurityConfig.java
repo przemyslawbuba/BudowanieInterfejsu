@@ -38,18 +38,20 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-            .cors()
-            .and()
-            .csrf().disable()
-            .authorizeRequests().antMatchers("/token/*").permitAll()
-            .and()
-            .authorizeRequests().anyRequest().authenticated()
-            .and()
-            .exceptionHandling().authenticationEntryPoint(unauthorizedHandler)
-            .and()
-            .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-            .and()
-            .addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class);
+                .cors()
+                .and()
+                .csrf().disable()
+                .authorizeRequests().antMatchers("/token/*").permitAll()
+                .and()
+                .authorizeRequests().antMatchers("/mail/*").permitAll()
+                .and()
+                .authorizeRequests().anyRequest().authenticated()
+                .and()
+                .exceptionHandling().authenticationEntryPoint(unauthorizedHandler)
+                .and()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                .addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class);
     }
 
 }

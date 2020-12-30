@@ -43,4 +43,5 @@ public class UserService implements UserDetailsService {
         return Collections.singletonList(new SimpleGrantedAuthority("ROLE_ADMIN"));
     }
 
+
 }
