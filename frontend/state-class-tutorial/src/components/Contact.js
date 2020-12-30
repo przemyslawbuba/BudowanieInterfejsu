@@ -5,60 +5,67 @@ class Contract extends Component {
         super(props);
 
         this.state = {
-            fields: {},
+            fields: {name:localStorage.getItem('contactName'), surname:localStorage.getItem('contactSurname'), email:localStorage.getItem('contactEmail'), query:localStorage.getItem('contactQuery')},
             errors: {}
         }
     }
 
     render() {
         return (
-            <form className="contractForm" onSubmit={this.contactSubmit.bind(this)} ref="form">
+            <form className="contractForm" onSubmit={this.contactSubmit.bind(this)} id="contactForm" ref={(el) => this.myFormRef = el}>
                 <h2>Formularz kontaktowy</h2>
                 <fieldset>
-                    <div className="form-group">
+                    <div>
                         <label htmlFor="name">Imię</label><br/>
-                        <input type="text" className="form-control"
-                               name="name" placeholder="Uzupełnij imię" onChange={this.handleChange.bind(this, "name")}
+                        <input id="name" placeholder="Uzupełnij imię" onChange={this.handleChange.bind(this, "name")}
                                value={this.state.fields["name"]}/>
                         <span style={{color: "red"}}>{this.state.errors["name"]}</span>
                     </div>
-                    <div className="form-group">
+                    <div>
                         <label htmlFor="surname">Nazwisko</label><br/>
-                        <input type="text" className="form-control"
-                               name="surname" placeholder="Uzupełnij nazwisko"
+                        <input id="surname" placeholder="Uzupełnij nazwisko"
                                onChange={this.handleChange.bind(this, "surname")} value={this.state.fields["surname"]}/>
                         <span style={{color: "red"}}>{this.state.errors["surname"]}</span>
                     </div>
-                    <div className="form-group">
+                    <div>
                         <label htmlFor="email">Adres e-mail</label><br/>
-                        <input type="text" className="form-control"
-                               name="email" placeholder="Uzupełnij adres e-mail"
+                        <input id="email" placeholder="Uzupełnij adres e-mail"
                                onChange={this.handleChange.bind(this, "email")}
                                value={this.state.fields["email"]}/>
                         <span style={{color: "red"}}>{this.state.errors["email"]}</span>
                     </div>
                     <div>
                         <label htmlFor="query">Treść pytania</label><br/>
-                        <textarea onChange={this.handleChange.bind(this, "query")}
+                        <textarea id="query" onChange={this.handleChange.bind(this, "query")}
                                   placeholder={"Uzupełnij treść pytania"}></textarea>
                     </div>
                     <span style={{color: "red"}}>{this.state.errors["query"]}</span>
                 </fieldset>
 
                 <button type="submit" className="btn btn-primary">Wyślij</button>
+                {/*<button onClick={this.clearForm()}>Wyczyść</button>*/}
             </form>
         )
     }
 
+    clearForm(){
+        this.state.fields["email"] = '';
+        this.state.fields["name"] = '';
+        this.state.fields["surname"] = '';
+        this.state.fields["query"] = '';
+        localStorage.setItem('contactName', '');
+        localStorage.setItem('contactSurname', '');
+        localStorage.setItem('contactEmail', '');
+        localStorage.setItem('contactQuery', '');
+        document.getElementById('query').value  = '';
+    }
+
     contactSubmit(e) {
         e.preventDefault();
-
         if (this.Validation()) {
-            alert("Form submitted");
-            // this.setState({ name: '' })
-            // document.getElementById('name').value = '';
+            this.clearForm();
         } else {
-            alert("Form has errors.")
+            // alert("Form has errors.")
         }
 
     }
@@ -75,9 +82,10 @@ class Contract extends Component {
         }
 
         if (typeof fields["name"] !== "undefined") {
-            if (!fields["name"].match(/^[a-zA-Z]+$/)) {
+            // if (!fields["name"].match(/^[a-zA-Z]+$/)) {
+            if (!fields["name"].match(/^[AaĄąBbCcĆćDdEeĘęFfGgHhIiJjKkLlŁłMmNnŃńOoÓóPpRrSsŚśTtUuWwYyZzŹźŻż]+$/)) {
                 isValid = false;
-                errors["name"] = "Only letters";
+                errors["name"] = "Niepoprawny znak";
             }
         }
         //surname
@@ -89,7 +97,7 @@ class Contract extends Component {
         if (typeof fields["surname"] !== "undefined") {
             if (!fields["surname"].match(/^[a-zA-Z]+$/)) {
                 isValid = false;
-                errors["surname"] = "Only letters";
+                errors["surname"] = "Niepoprawny znak";
             }
         }
         //email
@@ -103,10 +111,10 @@ class Contract extends Component {
 
             if (!(lastAtPos < lastDotPos && lastAtPos > 0 && fields["email"].indexOf('@@') == -1 && lastDotPos > 2 && (fields["email"].length - lastDotPos) > 2)) {
                 isValid = false;
-                errors["email"] = "Email is not valid";
+                errors["email"] = "Niepoprawny adres mailowy";
             }
         }
-        //query
+        // query
         if (!fields["query"]) {
             isValid = false;
             errors["query"] = "Treść pytania nie może być pusta";
@@ -116,12 +124,15 @@ class Contract extends Component {
         }
         this.setState({errors: errors});
 
-        var mail = fields["email"];
-        var surname = fields["surname"];
-        var name = fields["name"];
-        var query = fields["query"];
-        console.log(JSON.stringify({mail, surname, name, query}));
-        sendMail({mail, surname, name, query})
+        if(isValid) {
+            var mail = fields["email"];
+            var surname = fields["surname"];
+            var name = fields["name"];
+            var query = fields["query"];
+            console.log(JSON.stringify({mail, surname, name, query}));
+            sendMail({mail, surname, name, query})
+        }
+
         return isValid;
     }
 
@@ -129,10 +140,26 @@ class Contract extends Component {
         let fields = this.state.fields;
         fields[field] = e.target.value;
         this.setState({fields});
+
+        if (fields["name"]) {
+            localStorage.setItem('contactName', fields["name"])
+        }
+        if (fields["surname"]) {
+            localStorage.setItem('contactSurname', fields["surname"])
+        }
+        if (fields["email"]) {
+            localStorage.setItem('contactEmail', fields["email"])
+        }
+        if (fields["query"]) {
+            localStorage.setItem('contactQuery', fields["query"])
+        }
+
     }
 
 
+
 }
+
 function sendMail(contactMail) {
     return fetch('http://localhost:8080/mail/sendMail', {
         method: 'POST',
@@ -152,7 +179,6 @@ function sendMail(contactMail) {
             }
         }).catch(err => err);
 }
-
 
 
 export default Contract;
