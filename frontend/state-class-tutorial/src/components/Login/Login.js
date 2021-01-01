@@ -9,8 +9,13 @@ async function loginUser(credentials) {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify(credentials)
+    }).then(function(response) {
+        if (response.status === 500){
+            alert("Niepoprawny login lub hasło ")
+            return response.json();
+        }else
+            return response.json();
     })
-        .then(data => data.json())
 }
 
 export default function Login({ setToken }) {
@@ -20,11 +25,20 @@ export default function Login({ setToken }) {
     const handleSubmit = async e => {
         localStorage.setItem('username', username)
         e.preventDefault();
-        const token = await loginUser({
-            username,
-            password
-        });
-        setToken(token);
+        // console.log("Username: " + username);
+        // console.log("Password: " + password);
+        try {
+            const token = await loginUser({
+                username,
+                password
+            });
+            setToken(token);          
+        } catch (e) {
+            
+        }
+
+            
+
     }
 
     return(

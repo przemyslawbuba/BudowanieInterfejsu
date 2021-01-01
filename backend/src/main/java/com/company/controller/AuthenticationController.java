@@ -1,7 +1,9 @@
 package com.company.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,6 +22,9 @@ import com.company.service.UserService;
 public class AuthenticationController {
 
     @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
     private JwtToken jwtToken;
 
     @Autowired
@@ -28,8 +33,16 @@ public class AuthenticationController {
     @RequestMapping(value = "/generate-token", method = RequestMethod.POST)
     public ResponseEntity register(@RequestBody LoginUser loginUser) {
         final User user = userService.findOne(loginUser.getUsername());
-        final String token = jwtToken.generateToken(user);
-        return ResponseEntity.ok(Token.of(token));
+        final String token;
+        boolean encodeeee = passwordEncoder.matches(loginUser.getPassword(), user.getPassword());
+        if (passwordEncoder.matches(loginUser.getPassword(), user.getPassword())){
+            token = jwtToken.generateToken(user);
+            return ResponseEntity.ok(Token.of(token));
+        }else{
+            token = null;
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+
     }
 
 }

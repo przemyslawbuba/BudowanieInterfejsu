@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-
+import Weather from "./Weather";
 class Home extends Component {
     render() {
         return (
@@ -11,11 +11,25 @@ class Home extends Component {
                     W takim momencie niezbędna może okazać się wiedza osób zawodowo zajmujących się pośrednictwem w obrocie nieruchomościami.
                     Na stronie znajdują się nie tylko ogłoszenia nieruchomości, ale także porady oraz szczegóły na jakie należy zwrócić uwage podczas zakupu wymarzonego obiektu.
                 </p>
-
-
             </div>
+
         );
     }
 }
 
-export default Home;
+export default () => {
+    return(
+        <>
+            <table>
+                <tr>
+                    <td>
+                        <Home />
+                    </td>
+                  <td>
+                      <Weather />
+                  </td>
+                </tr>
+            </table>
+        </>
+    )
+}
