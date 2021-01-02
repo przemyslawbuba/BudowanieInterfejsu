@@ -5,11 +5,14 @@ import com.company.model.Contact;
 import com.company.model.Offer;
 import com.company.model.User;
 import com.company.service.OfferService;
+import com.company.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import java.security.Principal;
 import java.util.List;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -19,6 +22,11 @@ public class OfferController {
 
     @Autowired
     private OfferService offerService;
+
+    @Autowired
+    private UserService userService;
+
+    private User user;
 
     @GetMapping
     public List<Offer> listUser() {
@@ -34,6 +42,7 @@ public class OfferController {
     @RequestMapping(value = "/delete/{id}", method = RequestMethod.POST)
     public void deletePost(@PathVariable Integer id) {
         offerService.deleteOffer(id);
+
     }
 
 }

@@ -7,8 +7,10 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
+import {getRole} from "dom-accessibility-api";
 
 class Offer extends React.Component {
+    role;
 
     constructor(props) {
         super(props);
@@ -29,6 +31,7 @@ class Offer extends React.Component {
                             <TableCell align="right">Adres</TableCell>
                             <TableCell align="right">Powierzchnia(m2)</TableCell>
                             <TableCell align="right">Cena(zł)</TableCell>
+                            <TableCell  align="right"><p hidden={!this.isAdmin()}>Akcje</p></TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -40,13 +43,21 @@ class Offer extends React.Component {
                                 <TableCell align="right">{row.address}</TableCell>
                                 <TableCell align="right">{row.area}</TableCell>
                                 <TableCell align="right">{row.price}</TableCell>
-                                <button onClick={() => this.deleteOffer(row.id)}>Usuń{row.id}</button>
+                                <TableCell align="right"><button onClick={() => this.deleteOffer(row.id)} hidden={!this.isAdmin()}>Usuń ofertę</button></TableCell>
                             </TableRow>
                         ))}
                     </TableBody>
                 </Table>
             </TableContainer>
         );
+    }
+
+    isAdmin() {
+        if (localStorage.getItem('role') === 'ROLE_ADMIN'){
+            return true;
+        }else {
+            return false;
+        }
     }
 
 

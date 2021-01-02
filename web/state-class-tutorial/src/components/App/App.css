@@ -36,3 +36,11 @@ ul.header li a {
 .content li {
   margin-bottom: 10px;
 }
+
+.second.ui-btn-right {
+  right: 80px !important
+}
+.button {
+  right: 80px !important;
+
+}

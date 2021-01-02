@@ -29,7 +29,8 @@ function App() {
                     <li ><NavLink exact to="/">Strona domowa </NavLink></li>
                     <li><NavLink to="/offer">Oferty</NavLink></li>
                     <li><NavLink to="/contact">Kontakt</NavLink></li>
-                    <button onClick={logout}>Logout</button>
+                    <li><button onClick={logout}>Logout</button></li>
+                    <li><input value={getUsername()} readOnly={true} style={{width: "70px" }}></input></li>
                 </ul>
                 <div className="content">
                     <Route exact to path="/" component={Home}/>
@@ -43,5 +44,8 @@ function App() {
 function logout() {
     localStorage.clear();
     window.location.href = '/';
+}
+function getUsername(){
+    return localStorage.getItem('username')
 }
 export default App;
