@@ -153,11 +153,7 @@ class Contract extends Component {
         if (fields["query"]) {
             localStorage.setItem('contactQuery', fields["query"])
         }
-
     }
-
-
-
 }
 
 function sendMail(contactMail) {
@@ -179,6 +175,5 @@ function sendMail(contactMail) {
             }
         }).catch(err => err);
 }
-
 
 export default Contract;
