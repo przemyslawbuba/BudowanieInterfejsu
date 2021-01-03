@@ -63,7 +63,7 @@ class AddOffer extends Component {
         if (this.Validation()) {
             this.clearForm();
         } else {
-             alert("Form has errors.")
+             // alert("Form has errors.")
         }
 
     }
