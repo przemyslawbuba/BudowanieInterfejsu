@@ -1,0 +1,20 @@
+version: '3'
+
+services:
+  ws:
+    container_name: 'ws'
+    build:
+      context: ./ws
+      dockerfile: Dockerfile
+    ports:
+      - '8080:8080'
+
+  web:
+    container_name: 'web'
+    build:
+      context: ./web
+      dockerfile: Dockerfile
+    ports:
+      - '3000:3000'
+    depends_on:
+      - ws
