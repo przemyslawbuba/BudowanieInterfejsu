@@ -11,8 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service(value = "offerService")
-
 public class OfferService {
+
     @Autowired
     private OfferDoa offerDoa;
 

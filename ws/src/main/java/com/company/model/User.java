@@ -33,7 +33,7 @@ public class User {
     private long salary;
     @Column
     private int age;
-    @Column
-    private String role;
+    @ManyToMany(fetch = FetchType.EAGER)
+    private Set<Role> roles = new HashSet<Role>(0);
 
 }

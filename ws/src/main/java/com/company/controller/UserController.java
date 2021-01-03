@@ -1,8 +1,10 @@
 package com.company.controller;
 
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
 
+import com.company.model.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,8 +37,8 @@ public class UserController {
     @ResponseBody
     public String getRole(@PathVariable String username) {
         user = userService.findOne(username);
-        return user.getRole();
-//        return "ROLE_ADMIN";
+        List<Role> roleList = new ArrayList<>(user.getRoles());
+        return roleList.get(0).getRole();
     }
 
 }

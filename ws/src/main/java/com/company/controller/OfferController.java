@@ -1,18 +1,16 @@
 package com.company.controller;
 
-import com.company.mail.Mail;
-import com.company.model.Contact;
 import com.company.model.Offer;
+import com.company.model.Role;
 import com.company.model.User;
 import com.company.service.OfferService;
 import com.company.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
-import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -26,6 +24,9 @@ public class OfferController {
     @Autowired
     private UserService userService;
 
+//    @Autowired
+//    private RoleService roleService;
+
     private User user;
 
     @GetMapping
@@ -38,11 +39,21 @@ public class OfferController {
         offerService.addOffer(offer);
     }
 
-//    @DeleteMapping(value = "/delete/{id}")
+
     @RequestMapping(value = "/delete/{id}", method = RequestMethod.POST)
     public void deletePost(@PathVariable Integer id) {
-        offerService.deleteOffer(id);
-
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username = "";
+        if (principal instanceof UserDetails) {
+             username = ((UserDetails) principal).getUsername();
+        } else {
+             username = principal.toString();
+        }
+        user = userService.findOne(username);
+        List<Role> roleList = new ArrayList<>(user.getRoles());
+        if (roleList.get(0).getRole().contains("ROLE_ADMIN")){
+            offerService.deleteOffer(id);
+        }
     }
 
 }
