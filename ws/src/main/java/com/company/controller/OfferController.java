@@ -36,7 +36,18 @@ public class OfferController {
 
     @RequestMapping(value = "/addOffer", method = RequestMethod.POST)
     public void addOffer(@RequestBody Offer offer) {
-        offerService.addOffer(offer);
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username = "";
+        if (principal instanceof UserDetails) {
+            username = ((UserDetails) principal).getUsername();
+        } else {
+            username = principal.toString();
+        }
+        user = userService.findOne(username);
+        List<Role> roleList = new ArrayList<>(user.getRoles());
+        if (roleList.get(0).getRole().contains("ROLE_ADMIN")){
+            offerService.addOffer(offer);
+        }
     }
 
 
@@ -55,5 +66,6 @@ public class OfferController {
             offerService.deleteOffer(id);
         }
     }
+
 
 }

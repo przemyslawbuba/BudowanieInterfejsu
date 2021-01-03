@@ -82,7 +82,6 @@ class Contract extends Component {
         }
 
         if (typeof fields["name"] !== "undefined") {
-            // if (!fields["name"].match(/^[a-zA-Z]+$/)) {
             if (!fields["name"].match(/^[AaĄąBbCcĆćDdEeĘęFfGgHhIiJjKkLlŁłMmNnŃńOoÓóPpRrSsŚśTtUuWwYyZzŹźŻż]+$/)) {
                 isValid = false;
                 errors["name"] = "Niepoprawny znak";
